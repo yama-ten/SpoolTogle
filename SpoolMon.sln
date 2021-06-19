@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spool_SW", "SpoolMon\Spool_SW.csproj", "{AA5040E3-1F26-4279-9ECE-576290CEAEFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA5040E3-1F26-4279-9ECE-576290CEAEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA5040E3-1F26-4279-9ECE-576290CEAEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA5040E3-1F26-4279-9ECE-576290CEAEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA5040E3-1F26-4279-9ECE-576290CEAEFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C85A1F24-54BF-49D0-8155-277B82640C9F}
+	EndGlobalSection
+EndGlobal
