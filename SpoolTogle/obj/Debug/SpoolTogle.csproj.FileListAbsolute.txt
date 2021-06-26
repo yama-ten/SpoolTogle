@@ -1,0 +1,15 @@
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\bin\Debug\SpoolTogle.exe.config
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\bin\Debug\SpoolTogle.exe
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\bin\Debug\SpoolTogle.pdb
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\SpoolTogle.csprojAssemblyReference.cache
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\MainWindow.g.cs
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\App.g.cs
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\SpoolTogle_MarkupCompile.cache
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\SpoolTogle_MarkupCompile.lref
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\MainWindow.baml
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\SpoolTogle.g.resources
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\SpoolTogle.Properties.Resources.resources
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\SpoolTogle.csproj.GenerateResource.cache
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\SpoolTogle.csproj.CoreCompileInputs.cache
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\SpoolTogle.exe
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Debug\SpoolTogle.pdb

@@ -1,0 +1,14 @@
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\MainWindow.g.cs
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\App.g.cs
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\MainWindow.baml
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\SpoolTogle.csproj.GenerateResource.cache
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\SpoolTogle.csproj.CoreCompileInputs.cache
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\bin\Release\SpoolTogle.exe.config
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\bin\Release\SpoolTogle.exe
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\bin\Release\SpoolTogle.pdb
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\SpoolTogle_MarkupCompile.cache
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\SpoolTogle_MarkupCompile.lref
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\SpoolTogle.g.resources
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\SpoolTogle.Properties.Resources.resources
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\SpoolTogle.exe
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\SpoolTogle.pdb
