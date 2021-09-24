@@ -21,7 +21,7 @@ namespace SpoolTogle
 		private ServiceControllerStatus check_stat() {
 			ServiceControllerStatus stat;
 			string text = "";
-
+			Brush bg_color = null;
 			//usingステートメントは範囲から抜けた際に自動的にDisposeなどしてくれるので便利です。
 			//「任意のWindowsサービス」は動作したいサービス名を指定してください。
 			using (ServiceController sc = new ServiceController(ServiceName)) // 任意のWindowsサービス名
@@ -32,6 +32,7 @@ namespace SpoolTogle
 				switch (stat) {
 				case ServiceControllerStatus.Running:
 					text = "稼働中";
+					bg_color =  new LinearGradientBrush(Colors.LightSeaGreen, Colors.LightBlue, 90);
 					start_button.IsEnabled = false;
 					start_button.Content = "動作中";
 					start_button.Background = new LinearGradientBrush(Colors.LightBlue, Colors.Gray, 90);
@@ -43,6 +44,7 @@ namespace SpoolTogle
 
 				case ServiceControllerStatus.Stopped:
 					text = "停止中";
+					bg_color =  new LinearGradientBrush(Colors.LightPink, Colors.OrangeRed, 90);
 					start_button.IsEnabled = true;
 					start_button.Content = "起動させる";
 					start_button.Background = new LinearGradientBrush(Colors.LightBlue, Colors.SlateBlue, 90);
@@ -53,11 +55,13 @@ namespace SpoolTogle
 					break;
 
 				case ServiceControllerStatus.Paused:
+					bg_color = this.Background;
 					text = "一時停止中";
 					break;
 				}
 
 				this.Title = "プリンタスプーラ --- [" + text + "]";
+				this.Background = bg_color;
 			}
 
 			return stat;

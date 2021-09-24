@@ -6,27 +6,29 @@
         xmlns:local="clr-namespace:SpoolTogle"
         xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
         mc:Ignorable="d"
-        Title="プリンタスプーラ" SizeToContent="WidthAndHeight" Margin="0" Width="200" MinWidth="200" MinHeight="100" WindowStyle="ToolWindow">
+        Title="プリンタスプーラ" SizeToContent="WidthAndHeight" Margin="0" Width="322" MinWidth="200" MinHeight="72" WindowStyle="ToolWindow" Background="#FFBEF9A7" Height="106">
 
-	<Grid Margin="8" RenderTransformOrigin="0.084,0.282">
+	<Grid Margin="8,10,10,0" RenderTransformOrigin="0.084,0.282" Height="66" VerticalAlignment="Top">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="25*"/>
+			<RowDefinition Height="3*"/>
+		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="0*"/>
-			<ColumnDefinition Width="115*"/>
-			<ColumnDefinition Width="10*"/>
-			<ColumnDefinition Width="114*"/>
-			<ColumnDefinition Width="0*"/>
+			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
-		<RadioButton x:Name="start_button" Content="起動" RenderTransformOrigin="0.5,0.5" Checked="start_button_Checked" GroupName="SC_STAT" Style="{StaticResource {x:Type ToggleButton}}" Margin="0,2,0,0" Grid.Column="1" MinWidth="80" MinHeight="38"/>
-		<RadioButton x:Name="stop_button" Content="停止" Margin="2,2,-2,0" GroupName="SC_STAT" Checked="stop_button_Checked" Style="{StaticResource {x:Type ToggleButton}}" RenderTransformOrigin="0.5,0.5" Grid.Column="3" MinWidth="80" MinHeight="38" Grid.ColumnSpan="2">
+		<RadioButton x:Name="start_button" Content="起動" RenderTransformOrigin="0.5,0.5"     Checked="start_button_Checked" GroupName="SC_STAT" Style="{StaticResource {x:Type ToggleButton}}" Grid.Column="1"  MinWidth="60" MinHeight="20" Margin="0,0,0,0"  HorizontalAlignment="Left" Width="80" Height="60" VerticalAlignment="Top"  />
+		<RadioButton x:Name="stop_button"  Content="停止" RenderTransformOrigin="0.234,0.298" Checked="stop_button_Checked"  GroupName="SC_STAT" Style="{StaticResource {x:Type ToggleButton}}" Grid.Column="1"  MinWidth="60" MinHeight="20" Margin="90,0,0,0" HorizontalAlignment="Left" Width="80" Height="60" VerticalAlignment="Top" Grid.RowSpan="2">
 			<RadioButton.RenderTransform>
 				<TransformGroup>
 					<ScaleTransform/>
 					<SkewTransform/>
 					<RotateTransform Angle="-0.147"/>
-					<TranslateTransform X="0.063" Y="0.74"/>
+					<TranslateTransform X="0.036" Y="0.817"/>
 				</TransformGroup>
 			</RadioButton.RenderTransform>
 		</RadioButton>
+		<Button Content="全キャッシュ削除" Grid.Column="1" Margin="190,0,0,0"/>
 
 	</Grid>
 </Window>
