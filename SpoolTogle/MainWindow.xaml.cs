@@ -1,11 +1,21 @@
-﻿using System.ServiceProcess;
+﻿/****************************************************************
+ * title: PrintSpooler service util.
+ * file: MainWindow.xaml.cs
+ * discription: プリントスプーラのサービスを走らせたり、止めたり、キャッシュを削除したりします。
+ * version: 2.0
+ * date: 2021.09.24
+ * copyright: 
+ */
+
+using System.ServiceProcess;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.IO;
+using System.Collections.Generic;
 
 namespace SpoolTogle
 {
-
 	/// <summary>
 	/// MainWindow.xaml の相互作用ロジック
 	/// </summary>
@@ -18,6 +28,36 @@ namespace SpoolTogle
 			ServiceControllerStatus sc_stat = check_stat();
 		}
 
+		// スプールディレクトリ 'C:\Windows\System32\spool\PRINTERS' 
+		string SPOOL_DIR = @"C:\Windows\System32\spool\PRINTERS";
+
+		void clear_button_stat(bool enable=true)
+		{
+			List<string> spool_files = new List<string>();
+			spool_files.AddRange(Directory.EnumerateFiles(SPOOL_DIR, "*"));
+			var blk = new TextBlock();
+			blk.Text = $"全キャッシュ削除\n        ({spool_files.Count} 件)";
+			clear_cache.Content = blk;
+
+			bool stat = enable && (spool_files.Count > 0);
+			if (stat) {
+				clear_cache.IsEnabled = true;
+				clear_cache.Background = new LinearGradientBrush(Color.FromRgb(0xfb, 0xf4, 0x5f), Colors.Gray, 90);
+			}
+			else {
+				clear_cache.IsEnabled = false;
+				clear_cache.Background = new LinearGradientBrush(Color.FromRgb(128, 128, 58), Colors.Gray, 90);
+			}
+
+			// https://www.kakistamp.com/entry/2018/04/02/221856
+			//==========< ボタン内で改行を入れる >==========
+			// //(コード側で設定)
+			// var b = new TextBlock();
+			// b.Text = "TexoBlockのTextWrappingを使うと改行が楽だよ。";
+			// b.TextWrapping = TextWrapping.Wrap;
+			// Button02.Content = b;
+		}
+
 		private ServiceControllerStatus check_stat() {
 			ServiceControllerStatus stat;
 			string text = "";
@@ -26,6 +66,8 @@ namespace SpoolTogle
 			//「任意のWindowsサービス」は動作したいサービス名を指定してください。
 			using (ServiceController sc = new ServiceController(ServiceName)) // 任意のWindowsサービス名
 			{
+				clear_button_stat();
+
 				//プロパティ値を更新
 				sc.Refresh();
 				stat = sc.Status;
@@ -40,6 +82,8 @@ namespace SpoolTogle
 					stop_button.IsEnabled = true;
 					stop_button.Content = "停止させる";
 					stop_button.Background = new LinearGradientBrush(Colors.OrangeRed, Colors.LightPink, 90);
+
+					clear_button_stat(false);
 					break;
 
 				case ServiceControllerStatus.Stopped:
@@ -52,6 +96,10 @@ namespace SpoolTogle
 					stop_button.IsEnabled = false;
 					stop_button.Content = "停止中";
 					stop_button.Background = new LinearGradientBrush(Colors.OrangeRed, Colors.Gray, 90);
+
+					clear_button_stat(true);
+					//clear_cache.IsEnabled = false;
+					//clear_cache.Background = new LinearGradientBrush(Color.FromRgb(0xfa, 0xfa, 0x5f), Colors.Gray, 90);
 					break;
 
 				case ServiceControllerStatus.Paused:
@@ -110,6 +158,44 @@ namespace SpoolTogle
 			ServiceControllerStatus sc_stat = check_stat();
 			
 		//	Application.Current.Shutdown();
+		}
+
+		MessageBoxResult mbox(string text, string cap)
+		{
+			// https://docs.microsoft.com/ja-jp/dotnet/desktop/wpf/windows/how-to-open-message-box?view=netdesktop-5.0
+			string messageBoxText = text; //"Do you want to save changes?";
+			string caption = cap; //"Word Processor";
+			MessageBoxButton button = MessageBoxButton.YesNoCancel;
+			MessageBoxImage icon = MessageBoxImage.Warning;
+			MessageBoxResult result;
+
+			result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+
+			return result;
+		}
+
+		private void cache_clear_Click(object sender, RoutedEventArgs e)
+		{
+			string spool_dir = SPOOL_DIR;
+
+			if (!Directory.Exists(spool_dir))
+				return;
+
+			if (MessageBox.Show("本当にキャッシュを消してもよいか ?", "SpoolTogle"
+						, MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) 
+				return;
+
+			// ディレクトリ 'C:\Windows\System32\spool\PRINTERS' 取得
+			foreach (string fpath in System.IO.Directory.EnumerateFiles(spool_dir, "*")) {
+				//１ファイルの削除実行。
+				System.Diagnostics.Debug.WriteLine("削除 > " + fpath);
+				System.IO.File.Delete(fpath);
+				//	if (File.Exists(fpath))
+				//		System.Diagnostics.Debug.WriteLine("失敗 " + fpath);
+				//	else 
+				//		System.Diagnostics.Debug.WriteLine("seikou 成功");
+			}
+			clear_button_stat(true);
 		}
 	}
 }
