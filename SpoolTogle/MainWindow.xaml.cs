@@ -22,6 +22,8 @@ namespace SpoolTogle
 	public partial class MainWindow : Window
 	{
 		public string ServiceName = "Spooler";
+
+		/// <summary> 主処理 </summary>
 		public MainWindow() {
 			InitializeComponent();
 
@@ -31,33 +33,85 @@ namespace SpoolTogle
 		// スプールディレクトリ 'C:\Windows\System32\spool\PRINTERS' 
 		string SPOOL_DIR = @"C:\Windows\System32\spool\PRINTERS";
 
-		void clear_button_stat(bool enable=true)
+
+		/// <summary> [キャッシュ削除] ボタンのテキスト
+		/// https://www.kakistamp.com/entry/2018/04/02/221856
+		///==========< ボタン内で改行を入れる >==========
+		/// //(コード側で設定)
+		/// var b = new TextBlock();
+		/// b.Text = "TexoBlockのTextWrappingを使うと改行が楽だよ。";
+		/// b.TextWrapping = TextWrapping.Wrap;
+		/// Button02.Content = b;
+		/// 
+		/// </summary>
+		/// <param name="runing"></param>
+		void clear_button_text(bool runing = true)
 		{
-			List<string> spool_files = new List<string>();
-			spool_files.AddRange(Directory.EnumerateFiles(SPOOL_DIR, "*"));
+			List<string> files = new List<string>();
+			files.AddRange(Directory.EnumerateFiles(SPOOL_DIR, "*"));
 			var blk = new TextBlock();
-			blk.Text = $"全キャッシュ削除\n        ({spool_files.Count} 件)";
+			blk.Text = "キャッシュ削除";
+			if (files.Count > 0) {
+				blk.Text += $"\n        ({files.Count} 件)";
+			}
 			clear_cache.Content = blk;
 
-			bool stat = enable && (spool_files.Count > 0);
-			if (stat) {
+			if (!runing && (files.Count > 0)) {
+				// 停止中かつキャッシュあり
 				clear_cache.IsEnabled = true;
 				clear_cache.Background = new LinearGradientBrush(Color.FromRgb(0xfb, 0xf4, 0x5f), Colors.Gray, 90);
 			}
 			else {
+				// 動作中またはキャッシュなし
 				clear_cache.IsEnabled = false;
 				clear_cache.Background = new LinearGradientBrush(Color.FromRgb(128, 128, 58), Colors.Gray, 90);
 			}
 
-			// https://www.kakistamp.com/entry/2018/04/02/221856
-			//==========< ボタン内で改行を入れる >==========
-			// //(コード側で設定)
-			// var b = new TextBlock();
-			// b.Text = "TexoBlockのTextWrappingを使うと改行が楽だよ。";
-			// b.TextWrapping = TextWrapping.Wrap;
-			// Button02.Content = b;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="runing"></param>
+		void start_button_text(bool runing)
+		{
+			Brush bg_color = null;
+			if (runing) {
+				bg_color =  new LinearGradientBrush(Colors.LightSeaGreen, Colors.LightBlue, 90);
+				start_button.IsEnabled = false;
+				start_button.Content = "動作中";
+				start_button.Background = new LinearGradientBrush(Colors.LightBlue, Colors.Gray, 90);
+			}
+			else {
+				bg_color =  new LinearGradientBrush(Colors.LightPink, Colors.OrangeRed, 90);
+				start_button.IsEnabled = true;
+				start_button.Content = "起動させる";
+				start_button.Background = new LinearGradientBrush(Colors.LightBlue, Colors.SlateBlue, 90);
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="runing"></param>
+		void stop_button_text(bool runing)
+		{
+			if (runing) {
+				stop_button.IsEnabled = true;
+				stop_button.Content = "停止させる";
+				stop_button.Background = new LinearGradientBrush(Colors.OrangeRed, Colors.LightPink, 90);
+			}
+			else {
+				stop_button.IsEnabled = false;
+				stop_button.Content = "停止中";
+				stop_button.Background = new LinearGradientBrush(Colors.OrangeRed, Colors.Gray, 90);
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		private ServiceControllerStatus check_stat() {
 			ServiceControllerStatus stat;
 			string text = "";
@@ -66,7 +120,7 @@ namespace SpoolTogle
 			//「任意のWindowsサービス」は動作したいサービス名を指定してください。
 			using (ServiceController sc = new ServiceController(ServiceName)) // 任意のWindowsサービス名
 			{
-				clear_button_stat();
+				clear_button_text();
 
 				//プロパティ値を更新
 				sc.Refresh();
@@ -74,32 +128,16 @@ namespace SpoolTogle
 				switch (stat) {
 				case ServiceControllerStatus.Running:
 					text = "稼働中";
-					bg_color =  new LinearGradientBrush(Colors.LightSeaGreen, Colors.LightBlue, 90);
-					start_button.IsEnabled = false;
-					start_button.Content = "動作中";
-					start_button.Background = new LinearGradientBrush(Colors.LightBlue, Colors.Gray, 90);
-					
-					stop_button.IsEnabled = true;
-					stop_button.Content = "停止させる";
-					stop_button.Background = new LinearGradientBrush(Colors.OrangeRed, Colors.LightPink, 90);
-
-					clear_button_stat(false);
+					start_button_text(true);
+					stop_button_text(true);
+					clear_button_text(true);
 					break;
 
 				case ServiceControllerStatus.Stopped:
 					text = "停止中";
-					bg_color =  new LinearGradientBrush(Colors.LightPink, Colors.OrangeRed, 90);
-					start_button.IsEnabled = true;
-					start_button.Content = "起動させる";
-					start_button.Background = new LinearGradientBrush(Colors.LightBlue, Colors.SlateBlue, 90);
-					
-					stop_button.IsEnabled = false;
-					stop_button.Content = "停止中";
-					stop_button.Background = new LinearGradientBrush(Colors.OrangeRed, Colors.Gray, 90);
-
-					clear_button_stat(true);
-					//clear_cache.IsEnabled = false;
-					//clear_cache.Background = new LinearGradientBrush(Color.FromRgb(0xfa, 0xfa, 0x5f), Colors.Gray, 90);
+					start_button_text(false);
+					stop_button_text(false);
+					clear_button_text(false);
 					break;
 
 				case ServiceControllerStatus.Paused:
@@ -111,12 +149,12 @@ namespace SpoolTogle
 				this.Title = "プリンタスプーラ --- [" + text + "]";
 				this.Background = bg_color;
 			}
-
 			return stat;
-
 		}
 
-
+		/// <summary> [起動]ボタンを押した </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void start_button_Checked(object sender, RoutedEventArgs e)
 		{
 			RadioButton btn = (RadioButton)sender;
@@ -134,7 +172,9 @@ namespace SpoolTogle
 			// check_stat();
 		}
 
-
+		/// <summary> [停止]ボタンを押した </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void stop_button_Checked(object sender, RoutedEventArgs e)
 		{
 			RadioButton btn = (RadioButton)sender;
@@ -153,16 +193,21 @@ namespace SpoolTogle
 			// check_stat();
 		}
 
+		/// <summary> 終わり </summary>
 		private void program_exit()
 		{
 			ServiceControllerStatus sc_stat = check_stat();
-			
 		//	Application.Current.Shutdown();
 		}
 
+		/// <summary> メッセージボックスの体裁を変えたいときはここをいじる
+		/// https://docs.microsoft.com/ja-jp/dotnet/desktop/wpf/windows/how-to-open-message-box?view=netdesktop-5.0
+		/// </summary>
+		/// <param name="text"></param>
+		/// <param name="cap"></param>
+		/// <returns></returns>
 		MessageBoxResult mbox(string text, string cap)
 		{
-			// https://docs.microsoft.com/ja-jp/dotnet/desktop/wpf/windows/how-to-open-message-box?view=netdesktop-5.0
 			string messageBoxText = text; //"Do you want to save changes?";
 			string caption = cap; //"Word Processor";
 			MessageBoxButton button = MessageBoxButton.YesNoCancel;
@@ -174,6 +219,9 @@ namespace SpoolTogle
 			return result;
 		}
 
+		/// <summary> [キャッシュ削除]ボタンを押した </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void cache_clear_Click(object sender, RoutedEventArgs e)
 		{
 			string spool_dir = SPOOL_DIR;
@@ -195,7 +243,7 @@ namespace SpoolTogle
 				//	else 
 				//		System.Diagnostics.Debug.WriteLine("seikou 成功");
 			}
-			clear_button_stat(true);
+			clear_button_text(true);
 		}
 	}
 }
