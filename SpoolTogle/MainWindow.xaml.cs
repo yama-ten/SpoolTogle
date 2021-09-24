@@ -71,7 +71,7 @@ namespace SpoolTogle
 
 		}
 
-		/// <summary>
+		/// <summary> [起動] ボタンのテキスト
 		/// 
 		/// </summary>
 		/// <param name="runing"></param>
@@ -92,7 +92,7 @@ namespace SpoolTogle
 			}
 		}
 
-		/// <summary>
+		/// <summary> [停止] ボタンのテキスト
 		/// 
 		/// </summary>
 		/// <param name="runing"></param>
