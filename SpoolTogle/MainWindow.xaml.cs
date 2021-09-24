@@ -21,7 +21,11 @@ namespace SpoolTogle
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public string ServiceName = "Spooler";
+		//public string ServiceName = "Spooler";
+		string ServiceName = "Spooler";
+		
+		// スプールディレクトリ 'C:\Windows\System32\spool\PRINTERS' 
+		string SPOOL_DIR = @"C:\Windows\System32\spool\PRINTERS";
 
 		/// <summary> 主処理 </summary>
 		public MainWindow() {
@@ -30,8 +34,6 @@ namespace SpoolTogle
 			ServiceControllerStatus sc_stat = check_stat();
 		}
 
-		// スプールディレクトリ 'C:\Windows\System32\spool\PRINTERS' 
-		string SPOOL_DIR = @"C:\Windows\System32\spool\PRINTERS";
 
 
 		/// <summary> [キャッシュ削除] ボタンのテキスト
