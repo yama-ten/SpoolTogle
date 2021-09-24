@@ -52,7 +52,7 @@ namespace SpoolTogle
 			var blk = new TextBlock();
 			blk.Text = "キャッシュ削除";
 			if (files.Count > 0) {
-				blk.Text += $"\n        ({files.Count} 件)";
+				blk.Text += $"\n     ( {files.Count} 件)";
 			}
 			clear_cache.Content = blk;
 
