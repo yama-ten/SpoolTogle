@@ -15,7 +15,6 @@ C:\Users\tenshi\source\repos\SpoolTogle\SpoolMon\obj\Release\SpoolTogle.pdb
 C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\bin\Release\SpoolTogle.exe.config
 C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\bin\Release\SpoolTogle.exe
 C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\bin\Release\SpoolTogle.pdb
-C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Release\SpoolTogle.csproj.AssemblyReference.cache
 C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Release\MainWindow.g.cs
 C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Release\App.g.cs
 C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Release\SpoolTogle_MarkupCompile.cache
@@ -27,3 +26,4 @@ C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Release\SpoolTogle.csproj
 C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Release\SpoolTogle.csproj.CoreCompileInputs.cache
 C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Release\SpoolTogle.exe
 C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Release\SpoolTogle.pdb
+C:\Users\tenshi\source\repos\SpoolTogle\SpoolTogle\obj\Release\SpoolTogle.csproj.AssemblyReference.cache

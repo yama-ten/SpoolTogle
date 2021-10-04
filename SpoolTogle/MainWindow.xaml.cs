@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SpoolTogle
 {
@@ -247,6 +248,21 @@ namespace SpoolTogle
 			}
 			clear_button_text(true);
 		}
+
+
+		/// <summary>
+		/// 2021.10.04
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void spoolFolder_Click(object sender, RoutedEventArgs e)
+		{
+            ProcessStartInfo pInfo = new ProcessStartInfo();
+            pInfo.FileName = "explorer";
+            pInfo.Arguments = SPOOL_DIR;
+ 
+            Process.Start(pInfo);
+ 		}
 	}
 }
 
