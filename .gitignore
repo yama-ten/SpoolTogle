@@ -3,3 +3,6 @@
 *.cache
 /obj
 /bin
+*.exe
+*.exe
+*.cache
