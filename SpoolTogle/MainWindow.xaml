@@ -21,10 +21,14 @@
 		<RadioButton x:Name="stop_button"  Content="停止" RenderTransformOrigin="0.5,0.5" Checked="stop_button_Checked"  GroupName="SC_STAT" Style="{StaticResource {x:Type ToggleButton}}" Grid.Column="1"  MinWidth="60" MinHeight="20" Margin="90,0,0,0" HorizontalAlignment="Left" Width="80" Height="70" VerticalAlignment="Top" />
 
 		<!-- Content="全キャッシュ削除" -->
-		<Button x:Name="clear_cache" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1" Margin="187,0,4,0" Width="120" Click="cache_clear_Click" Background="#FF807C33" Height="45" VerticalAlignment="Top">
-			<TextBlock HorizontalAlignment="Center">１行目の文字列<LineBreak />２行目の文字列</TextBlock>
+		<Button x:Name="clear_cache" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1" Margin="187,0,4,0" Width="120" Click="cache_clear_Click" Background="#FF807C33" Height="70" VerticalAlignment="Top">
+			<TextBlock HorizontalAlignment="Center">１行目の文字列<LineBreak />２行目の文字列<LineBreak />３行目の文字列</TextBlock>
 		</Button>
-		<Button x:Name="spoolFolder" Grid.ColumnSpan="2" Content="スプールフォルダ" HorizontalAlignment="Left" Margin="187,50,0,0" VerticalAlignment="Top" Width="120" Click="spoolFolder_Click"/>
+		<Button x:Name="spoolFolder" Grid.ColumnSpan="2" Content="スプールフォルダ" HorizontalAlignment="Left" Margin="200,50,0,0" VerticalAlignment="Top" Width="101" Click="spoolFolder_Click" Visibility="Hidden">
+			<Button.Effect>
+				<BlurEffect Radius="2" RenderingBias="Quality" KernelType="Box"/>
+			</Button.Effect>
+		</Button>
 
 	</Grid>
 </Window>

@@ -232,6 +232,8 @@ namespace SpoolTogle
 			if (!Directory.Exists(spool_dir))
 				return;
 
+			spoolFolder_Click(sender, e);
+		
 			if (MessageBox.Show("本当にキャッシュを消してもよいか ?", "SpoolTogle"
 						, MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) 
 				return;
