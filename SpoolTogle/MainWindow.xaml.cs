@@ -8,22 +8,22 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.ServiceProcess;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.IO;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Forms;
 using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace SpoolTogle
 {
-	/// <summary>
-	/// MainWindow.xaml の相互作用ロジック
-	/// </summary>
-	public partial class MainWindow : Window
+    /// <summary>
+    /// MainWindow.xaml の相互作用ロジック
+    /// </summary>
+    public partial class MainWindow : Window
 	{
 		//public string ServiceName = "Spooler";
 		string ServiceName = "Spooler";
