@@ -7,6 +7,7 @@
  * copyright: 
  */
 
+using System;
 using System.ServiceProcess;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,8 @@ using System.Windows.Media;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Forms;
+using System.Windows.Interop;
 
 namespace SpoolTogle
 {
@@ -160,7 +163,7 @@ namespace SpoolTogle
 		/// <param name="e"></param>
 		private void start_button_Checked(object sender, RoutedEventArgs e)
 		{
-			RadioButton btn = (RadioButton)sender;
+			System.Windows.Controls.RadioButton btn = (System.Windows.Controls.RadioButton)sender;
 			if ((bool)btn.IsChecked) {
 				using (ServiceController sc = new ServiceController(ServiceName)) {
 					sc.Refresh();       //プロパティ値を更新
@@ -180,7 +183,7 @@ namespace SpoolTogle
 		/// <param name="e"></param>
 		private void stop_button_Checked(object sender, RoutedEventArgs e)
 		{
-			RadioButton btn = (RadioButton)sender;
+			System.Windows.Controls.RadioButton btn = (System.Windows.Controls.RadioButton)sender;
 
 			if ((bool)btn.IsChecked) {
 				using (ServiceController sc = new ServiceController(ServiceName)) {
@@ -215,11 +218,15 @@ namespace SpoolTogle
 			string caption = cap; //"Word Processor";
 			MessageBoxButton button = MessageBoxButton.YesNoCancel;
 			MessageBoxImage icon = MessageBoxImage.Warning;
-			MessageBoxResult result;
+			//MessageBoxResult result;
+			DialogResult result;
 
-			result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+			result = CustomMessageBox.Show(new WindowWrapper(this)
+				, messageBoxText, caption
+				, (System.Windows.Forms.MessageBoxButtons)button
+				, (System.Windows.Forms.MessageBoxIcon)icon); //, MessageBoxResult.Yes);
 
-			return result;
+			return (MessageBoxResult)result;
 		}
 
 		/// <summary> [キャッシュ削除]ボタンを押した </summary>
@@ -233,16 +240,22 @@ namespace SpoolTogle
 				return;
 
 			spoolFolder_Click(sender, e);
-		
-			if (MessageBox.Show("本当にキャッシュを消してもよいか ?", "SpoolTogle"
-						, MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) 
+
+			//if (CustomMessageBox.Show((IWin32Window)this
+			var res = CustomMessageBox.Show(new WindowWrapper(this)
+						, "本当にキャッシュを消してもよいか ?"
+						, "SpoolTogle"
+						, (System.Windows.Forms.MessageBoxButtons)MessageBoxButton.OKCancel
+						, (System.Windows.Forms.MessageBoxIcon)MessageBoxImage.Question);
+				//!= MessageBoxResult.OK)
+				if (res != System.Windows.Forms.DialogResult.OK) 
 				return;
 
 			// ディレクトリ 'C:\Windows\System32\spool\PRINTERS' 取得
-			foreach (string fpath in System.IO.Directory.EnumerateFiles(spool_dir, "*")) {
+			foreach (string fpath in Directory.EnumerateFiles(spool_dir, "*")) {
 				//１ファイルの削除実行。
 				System.Diagnostics.Debug.WriteLine("削除 > " + fpath);
-				System.IO.File.Delete(fpath);
+				File.Delete(fpath);
 				//	if (File.Exists(fpath))
 				//		System.Diagnostics.Debug.WriteLine("失敗 " + fpath);
 				//	else 
@@ -259,12 +272,44 @@ namespace SpoolTogle
 		/// <param name="e"></param>
 		private void spoolFolder_Click(object sender, RoutedEventArgs e)
 		{
-            ProcessStartInfo pInfo = new ProcessStartInfo();
-            pInfo.FileName = "explorer";
-            pInfo.Arguments = SPOOL_DIR;
+			ProcessStartInfo pInfo = new ProcessStartInfo();
+			pInfo.FileName = "explorer";
+			pInfo.Arguments = SPOOL_DIR;
  
-            Process.Start(pInfo);
- 		}
+			Process.Start(pInfo);
+		}
+
+
+	}
+
+	/// <summary>
+	/// ウィンドウハンドルを取得
+	/// 2022.02.01
+	/// using System.Windows.Interop;
+	/// 
+	/// You would then get your IWin32Window like this:
+	///		IWin32Window win32Window = new WindowWrapper(new WindowInteropHelper(this).Handle);
+	/// or(in response to KeithS' suggestion):
+	///		IWin32Window win32Window = new WindowWrapper(this);
+	/// </summary>
+	public class WindowWrapper : System.Windows.Forms.IWin32Window
+	{
+		public WindowWrapper(IntPtr handle)
+		{
+			_hwnd = handle;
+		}
+
+		public WindowWrapper(Window window)
+		{
+			_hwnd = new WindowInteropHelper(window).Handle;
+		}
+
+		public IntPtr Handle
+		{
+			get { return _hwnd; }
+		}
+
+		private IntPtr _hwnd;
 	}
 }
 
