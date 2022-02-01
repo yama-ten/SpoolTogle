@@ -12,6 +12,7 @@ namespace SpoolTogle
 {
     /// <summary>
     /// メッセージボックスをオーナーフォームの中央に表示
+    /// https://qiita.com/Apeworks/items/263645a599f3ed73567e
     /// </summary>
     static class CustomMessageBox
     {

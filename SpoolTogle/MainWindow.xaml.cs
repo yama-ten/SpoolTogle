@@ -114,8 +114,7 @@ namespace SpoolTogle
 			}
 		}
 
-		/// <summary>
-		/// 
+		/// <summary> サービスの稼働状態を調べる
 		/// </summary>
 		/// <returns></returns>
 		private ServiceControllerStatus check_stat() {
@@ -163,19 +162,19 @@ namespace SpoolTogle
 		/// <param name="e"></param>
 		private void start_button_Checked(object sender, RoutedEventArgs e)
 		{
-			System.Windows.Controls.RadioButton btn = (System.Windows.Controls.RadioButton)sender;
-			if ((bool)btn.IsChecked) {
-				using (ServiceController sc = new ServiceController(ServiceName)) {
-					sc.Refresh();       //プロパティ値を更新
+			var btn = (System.Windows.Controls.RadioButton)sender;
+			if (!(bool)btn.IsChecked) 
+				return;
 
-					if (sc.Status == ServiceControllerStatus.Stopped) { //停止中
-						sc.Start();     // 開始
-						sc.WaitForStatus(System.ServiceProcess.ServiceControllerStatus.Running);
-						program_exit();
-					}
+			using (ServiceController sc = new ServiceController(ServiceName)) {
+				sc.Refresh();       //プロパティ値を更新
+
+				if (sc.Status == ServiceControllerStatus.Stopped) { //停止中なら
+					sc.Start();     // 開始する
+					sc.WaitForStatus(ServiceControllerStatus.Running);
+					program_exit();
 				}
 			}
-			// check_stat();
 		}
 
 		/// <summary> [停止]ボタンを押した </summary>
@@ -183,50 +182,25 @@ namespace SpoolTogle
 		/// <param name="e"></param>
 		private void stop_button_Checked(object sender, RoutedEventArgs e)
 		{
-			System.Windows.Controls.RadioButton btn = (System.Windows.Controls.RadioButton)sender;
+			var btn = (System.Windows.Controls.RadioButton)sender;
+			if (!(bool)btn.IsChecked) 
+				return;
 
-			if ((bool)btn.IsChecked) {
-				using (ServiceController sc = new ServiceController(ServiceName)) {
-					sc.Refresh();       //プロパティ値を更新
+			using (ServiceController sc = new ServiceController(ServiceName)) {
+				sc.Refresh();	//プロパティ値を更新
 
-					if (sc.Status == ServiceControllerStatus.Running) { //起動中
-						sc.Stop();   // 停止
-						sc.WaitForStatus(System.ServiceProcess.ServiceControllerStatus.Stopped);
-						program_exit();
-					}
+				if (sc.Status == ServiceControllerStatus.Running) { //起動中なら
+					sc.Stop();	// 停止する
+					sc.WaitForStatus(ServiceControllerStatus.Stopped);
+					program_exit();
 				}
 			}
-			// check_stat();
 		}
 
 		/// <summary> 終わり </summary>
 		private void program_exit()
 		{
 			ServiceControllerStatus sc_stat = check_stat();
-		//	Application.Current.Shutdown();
-		}
-
-		/// <summary> メッセージボックスの体裁を変えたいときはここをいじる
-		/// https://docs.microsoft.com/ja-jp/dotnet/desktop/wpf/windows/how-to-open-message-box?view=netdesktop-5.0
-		/// </summary>
-		/// <param name="text"></param>
-		/// <param name="cap"></param>
-		/// <returns></returns>
-		MessageBoxResult mbox(string text, string cap)
-		{
-			string messageBoxText = text; //"Do you want to save changes?";
-			string caption = cap; //"Word Processor";
-			MessageBoxButton button = MessageBoxButton.YesNoCancel;
-			MessageBoxImage icon = MessageBoxImage.Warning;
-			//MessageBoxResult result;
-			DialogResult result;
-
-			result = CustomMessageBox.Show(new WindowWrapper(this)
-				, messageBoxText, caption
-				, (System.Windows.Forms.MessageBoxButtons)button
-				, (System.Windows.Forms.MessageBoxIcon)icon); //, MessageBoxResult.Yes);
-
-			return (MessageBoxResult)result;
 		}
 
 		/// <summary> [キャッシュ削除]ボタンを押した </summary>
@@ -239,16 +213,14 @@ namespace SpoolTogle
 			if (!Directory.Exists(spool_dir))
 				return;
 
-			spoolFolder_Click(sender, e);
+			spoolFolder_Open(sender, e);
 
-			//if (CustomMessageBox.Show((IWin32Window)this
 			var res = CustomMessageBox.Show(new WindowWrapper(this)
 						, "本当にキャッシュを消してもよいか ?"
 						, "SpoolTogle"
 						, (System.Windows.Forms.MessageBoxButtons)MessageBoxButton.OKCancel
 						, (System.Windows.Forms.MessageBoxIcon)MessageBoxImage.Question);
-				//!= MessageBoxResult.OK)
-				if (res != System.Windows.Forms.DialogResult.OK) 
+			if (res != System.Windows.Forms.DialogResult.OK) 
 				return;
 
 			// ディレクトリ 'C:\Windows\System32\spool\PRINTERS' 取得
@@ -256,21 +228,18 @@ namespace SpoolTogle
 				//１ファイルの削除実行。
 				System.Diagnostics.Debug.WriteLine("削除 > " + fpath);
 				File.Delete(fpath);
-				//	if (File.Exists(fpath))
-				//		System.Diagnostics.Debug.WriteLine("失敗 " + fpath);
-				//	else 
-				//		System.Diagnostics.Debug.WriteLine("seikou 成功");
 			}
 			clear_button_text(true);
 		}
 
 
 		/// <summary>
+		/// スプールファイルのあるフォルダをエクスプローラで開く
 		/// 2021.10.04
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void spoolFolder_Click(object sender, RoutedEventArgs e)
+		private void spoolFolder_Open(object sender, RoutedEventArgs e)
 		{
 			ProcessStartInfo pInfo = new ProcessStartInfo();
 			pInfo.FileName = "explorer";
@@ -287,6 +256,8 @@ namespace SpoolTogle
 	/// 2022.02.01
 	/// using System.Windows.Interop;
 	/// 
+	/// "Get System.Windows.Forms.IWin32Window from WPF window"
+	/// https://stackoverflow.com/questions/10296018/get-system-windows-forms-iwin32window-from-wpf-window/10296513
 	/// You would then get your IWin32Window like this:
 	///		IWin32Window win32Window = new WindowWrapper(new WindowInteropHelper(this).Handle);
 	/// or(in response to KeithS' suggestion):
@@ -294,7 +265,7 @@ namespace SpoolTogle
 	/// </summary>
 	public class WindowWrapper : System.Windows.Forms.IWin32Window
 	{
-		public WindowWrapper(IntPtr handle)
+		public WindowWrapper(IntPtr handle) 
 		{
 			_hwnd = handle;
 		}
@@ -312,112 +283,3 @@ namespace SpoolTogle
 		private IntPtr _hwnd;
 	}
 }
-
-/**
-
-
-	
-static void Test2(string[] args)
-{
-	try
-	{
-		string name;
-		string machine_name;
-		name = "Spooler";
-		machine_name = ".";
-		System.ServiceProcess.ServiceController sc = new System.ServiceProcess.ServiceController(name, machine_name);
-		System.ServiceProcess.ServiceControllerStatus stat = sc.Status;
-		Console.WriteLine(string.Format("Service=\"{0}\" Current Stat={1}", name, stat.ToString()));
-		switch (stat)
-		{
-			case System.ServiceProcess.ServiceControllerStatus.Stopped:
-				// サービスが停止している場合
-				sc.Start();
-				// 指定した状態になるのを待つ
-				sc.WaitForStatus(System.ServiceProcess.ServiceControllerStatus.Running);
-				Console.WriteLine(string.Format("Service=\"{0}\" Changed Stat={1}", name, sc.Status.ToString()));
-				break;
-			case System.ServiceProcess.ServiceControllerStatus.Running:
-				if(sc.CanStop)
-				{
-					sc.Stop();
-					// 指定した状態になるのを待つ
-					sc.WaitForStatus(System.ServiceProcess.ServiceControllerStatus.Stopped);
-					Console.WriteLine(string.Format("Service=\"{0}\" Changed Stat={1}", name, sc.Status.ToString()));
-				}
-				else if (sc.CanPauseAndContinue)
-				{
-					// 一時中断、再開できる場合
-					sc.Pause();
-					// 指定した状態になるのを待つ
-					sc.WaitForStatus(System.ServiceProcess.ServiceControllerStatus.Paused);
-					Console.WriteLine(string.Format("Service=\"{0}\" Changed Stat={1}", name, sc.Status.ToString()));
-				}
-				break;
-			case System.ServiceProcess.ServiceControllerStatus.Paused:
-				// 一時中断状態の場合
-				if (sc.CanPauseAndContinue)
-				{
-					// 一時中断、再開できる場合
-					sc.Continue();
-					// 指定した状態になるのを待つ
-					sc.WaitForStatus(System.ServiceProcess.ServiceControllerStatus.Running);
-					Console.WriteLine(string.Format("Service=\"{0}\" Changed Stat={1}", name, sc.Status.ToString()));
-				}
-				break;
-			default:
-				break;
-		}
-	}
-	catch (InvalidOperationException ex)
-	{
-		Console.WriteLine(ex.Message);
-	}
-	catch (Exception ex)
-	{
-		Console.WriteLine(ex.Message);
-	}
-}
-
-***
-
-namespace ServiceControllerSample
-{
-	class Program
-	{
-		static void Main(string[] args)
-		{
-			//usingステートメントは範囲から抜けた際に自動的にDisposeなどしてくれるので便利です。
-			//「任意のWindowsサービス」は動作したいサービス名を指定してください。
-			using (ServiceController sc = new ServiceController("Spooler")) // 任意のWindowsサービス名
-			{
-				//プロパティ値を更新
-				sc.Refresh();
-				 
-				//起動中
-				if (sc.Status == ServiceControllerStatus.Running)
-				{
-					// 停止
-					sc.Stop();
-					// 一時停止
-					//sc.Pause();
-				}
-				//停止中
-				else if (sc.Status == ServiceControllerStatus.Stopped)
-				{
-					// 開始
-					sc.Start();
-				}
-				//一時停止中
-				else if (sc.Status == ServiceControllerStatus.Paused)
-				{
-					// 再開
-					sc.Continue();
-					// 停止
-					//sc.Stop();
-				}
-			}
-		}
-	}
-}
- **/

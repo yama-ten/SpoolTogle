@@ -24,7 +24,7 @@
 		<Button x:Name="clear_cache" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1" Margin="187,0,4,0" Width="120" Click="cache_clear_Click" Background="#FF807C33" Height="70" VerticalAlignment="Top">
 			<TextBlock HorizontalAlignment="Center">１行目の文字列<LineBreak />２行目の文字列<LineBreak />３行目の文字列</TextBlock>
 		</Button>
-		<Button x:Name="spoolFolder" Grid.ColumnSpan="2" Content="スプールフォルダ" HorizontalAlignment="Left" Margin="200,50,0,0" VerticalAlignment="Top" Width="101" Click="spoolFolder_Click" Visibility="Hidden">
+		<Button x:Name="spoolFolder" Grid.ColumnSpan="2" Content="スプールフォルダ" HorizontalAlignment="Left" Margin="200,50,0,0" VerticalAlignment="Top" Width="101" Click="spoolFolder_Open" Visibility="Hidden">
 			<Button.Effect>
 				<BlurEffect Radius="2" RenderingBias="Quality" KernelType="Box"/>
 			</Button.Effect>
