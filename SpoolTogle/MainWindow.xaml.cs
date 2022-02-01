@@ -51,7 +51,7 @@ namespace SpoolTogle
 		/// 
 		/// </summary>
 		/// <param name="runing"></param>
-		void clear_button_text(bool runing = true)
+		void cache_button_text(bool runing = true)
 		{
 			List<string> files = new List<string>();
 			files.AddRange(Directory.EnumerateFiles(SPOOL_DIR, "*"));
@@ -60,17 +60,17 @@ namespace SpoolTogle
 			if (files.Count > 0) {
 				blk.Text += $"\n     ( {files.Count} 件)";
 			}
-			clear_cache.Content = blk;
+			clear_cache_button.Content = blk;
 
 			if (!runing && (files.Count > 0)) {
 				// 停止中かつキャッシュあり
-				clear_cache.IsEnabled = true;
-				clear_cache.Background = new LinearGradientBrush(Color.FromRgb(0xfb, 0xf4, 0x5f), Colors.Gray, 90);
+				clear_cache_button.IsEnabled = true;
+				clear_cache_button.Background = new LinearGradientBrush(Color.FromRgb(0xfb, 0xf4, 0x5f), Colors.Gray, 90);
 			}
 			else {
 				// 動作中またはキャッシュなし
-				clear_cache.IsEnabled = false;
-				clear_cache.Background = new LinearGradientBrush(Color.FromRgb(128, 128, 58), Colors.Gray, 90);
+				clear_cache_button.IsEnabled = false;
+				clear_cache_button.Background = new LinearGradientBrush(Color.FromRgb(128, 128, 58), Colors.Gray, 90);
 			}
 
 		}
@@ -125,7 +125,7 @@ namespace SpoolTogle
 			//「任意のWindowsサービス」は動作したいサービス名を指定してください。
 			using (ServiceController sc = new ServiceController(ServiceName)) // 任意のWindowsサービス名
 			{
-				clear_button_text();
+				cache_button_text();
 
 				//プロパティ値を更新
 				sc.Refresh();
@@ -135,24 +135,27 @@ namespace SpoolTogle
 					text = "稼働中";
 					start_button_text(true);
 					stop_button_text(true);
-					clear_button_text(true);
+					cache_button_text(true);
+					this.Background = new LinearGradientBrush(Colors.SlateBlue, Colors.LightGreen, 0);
 					break;
 
 				case ServiceControllerStatus.Stopped:
 					text = "停止中";
 					start_button_text(false);
 					stop_button_text(false);
-					clear_button_text(false);
+					cache_button_text(false);
+					this.Background = new LinearGradientBrush(Colors.LightSalmon, Colors.LightGoldenrodYellow, 0);
 					break;
 
 				case ServiceControllerStatus.Paused:
-					bg_color = this.Background;
+					//bg_color = this.Background;
 					text = "一時停止中";
+					this.Background = new LinearGradientBrush(Colors.LightGoldenrodYellow, Colors.LightGoldenrodYellow, 0);
 					break;
 				}
 
 				this.Title = "プリンタスプーラ --- [" + text + "]";
-				this.Background = bg_color;
+				//this.Background = bg_color;
 			}
 			return stat;
 		}
@@ -229,7 +232,7 @@ namespace SpoolTogle
 				System.Diagnostics.Debug.WriteLine("削除 > " + fpath);
 				File.Delete(fpath);
 			}
-			clear_button_text(true);
+			cache_button_text(true);
 		}
 
 
